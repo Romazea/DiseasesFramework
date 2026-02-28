@@ -14,11 +14,11 @@ namespace DiseasesFramework.InfectionVectors
 
         public HediffCompProperties_CombatContagion()
         {
-            this.compClass = typeof(HediffComp_CombatContagion);
+            this.compClass = typeof(HediffComp_DefensiveContagion);
         }
     }
 
-    public class HediffComp_CombatContagion : HediffComp
+    public class HediffComp_DefensiveContagion : HediffComp
     {
         public HediffCompProperties_CombatContagion Props => (HediffCompProperties_CombatContagion)this.props;
 

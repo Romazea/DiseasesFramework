@@ -66,24 +66,37 @@ namespace DiseasesFramework.InfectionVectors
                         continue;
                     }
 
-                    if (Rand.Chance(Props.infectionChance))
+                    float protection = targetPawn.GetStatValue(StatDefOf.ToxicEnvironmentResistance);
+                    float adjustedChance;
+
+                    if (protection >= 0.8f)
+                    {
+                        adjustedChance = 0f;
+                    }
+                    else if (protection >= 0.5f)
+                    {
+                        adjustedChance = Props.infectionChance * 0.1f;
+                    }
+                    else
+                    {
+                        adjustedChance = Props.infectionChance * (1f - protection);
+                    }
+
+                    if (adjustedChance > 0f && Rand.Chance(adjustedChance))
                     {
                         targetPawn.health.AddHediff(Props.hediffToApply);
 
-                        if (Props.sendNotification)
+                        if (Props.sendNotification && targetPawn.Faction == Faction.OfPlayer)
                         {
-                            if (targetPawn.Faction == Faction.OfPlayer)
-                            {
-                                string text = targetPawn.LabelShort + " has caught " + Props.hediffToApply.label + " through proximity.";
+                            string text = targetPawn.LabelShort + " has caught " + Props.hediffToApply.label + " through proximity.";
 
-                                if (Props.useLetterInsteadOfMessage)
-                                {
-                                    Find.LetterStack.ReceiveLetter("New Infection!", text, LetterDefOf.NegativeEvent, targetPawn);
-                                }
-                                else
-                                {
-                                    Messages.Message(text, targetPawn, MessageTypeDefOf.NegativeEvent, true);
-                                }
+                            if (Props.useLetterInsteadOfMessage)
+                            {
+                                Find.LetterStack.ReceiveLetter("New Infection!", text, LetterDefOf.NegativeEvent, targetPawn);
+                            }
+                            else
+                            {
+                                Messages.Message(text, targetPawn, MessageTypeDefOf.NegativeEvent, true);
                             }
                         }
                     }

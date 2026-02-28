@@ -1,6 +1,7 @@
 ﻿using Verse;
 using RimWorld;
 using HarmonyLib;
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace DiseasesFramework.InfectionVectors
@@ -10,6 +11,9 @@ namespace DiseasesFramework.InfectionVectors
         public float infectionChance = 0.5f;
         public HediffDef hediffToApply;
         public bool onlyMelee = true;
+
+        public bool requiresDamageToPenetrate = true;
+        public bool respectsToxicResistance = false;
 
         public bool sendNotification = false;
         public bool useLetterInsteadOfMessage = false;
@@ -30,7 +34,6 @@ namespace DiseasesFramework.InfectionVectors
     {
         public static void Postfix(Pawn __instance, DamageInfo dinfo, float totalDamageDealt)
         {
-
             if (__instance == null || __instance.Dead || dinfo.Instigator == null) return;
 
             Pawn attacker = dinfo.Instigator as Pawn;
@@ -46,6 +49,8 @@ namespace DiseasesFramework.InfectionVectors
                     var props = comp.Props;
                     if (props.hediffToApply == null) continue;
 
+                    if (props.requiresDamageToPenetrate && totalDamageDealt <= 0f) continue;
+
                     if (props.onlyMelee)
                     {
                         bool isMeleeAttack = dinfo.Weapon == null || !dinfo.Weapon.IsRangedWeapon;
@@ -54,7 +59,20 @@ namespace DiseasesFramework.InfectionVectors
 
                     if (__instance.health.hediffSet.HasHediff(props.hediffToApply)) continue;
 
-                    if (Rand.Chance(props.infectionChance))
+                    float finalChance = props.infectionChance;
+
+                    if (props.respectsToxicResistance)
+                    {
+                        float bioRes = __instance.GetStatValue(StatDefOf.ToxicResistance);
+
+                        float envRes = __instance.GetStatValue(StatDefOf.ToxicEnvironmentResistance);
+
+                        float bestProtection = Mathf.Max(bioRes, envRes);
+
+                        finalChance *= Mathf.Clamp01(1f - bestProtection);
+                    }
+
+                    if (Rand.Chance(finalChance))
                     {
                         __instance.health.AddHediff(props.hediffToApply);
 

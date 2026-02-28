@@ -333,6 +333,7 @@
   <ItemGroup>
     <Compile Include="DiseasesFrameworkCore.cs" />
     <Compile Include="InfectionVectors\HediffComp_AuraContagion.cs" />
+    <Compile Include="InfectionVectors\HediffComp_CombatContagion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

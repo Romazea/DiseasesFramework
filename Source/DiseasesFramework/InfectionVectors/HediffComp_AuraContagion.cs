@@ -56,6 +56,11 @@ namespace DiseasesFramework.InfectionVectors
 
                 if (targetPawn != null && !targetPawn.Dead && targetPawn != this.Pawn)
                 {
+                    if (targetPawn.RaceProps.IsMechanoid || targetPawn.RaceProps.FleshType == FleshTypeDefOf.Normal)
+                    {
+                        continue;
+                    }
+
                     if (Props.requireLineOfSight && !GenSight.LineOfSight(this.Pawn.Position, targetPawn.Position, this.Pawn.Map, true))
                     {
                         continue;

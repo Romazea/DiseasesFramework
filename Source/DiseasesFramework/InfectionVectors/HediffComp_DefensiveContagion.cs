@@ -50,6 +50,11 @@ namespace DiseasesFramework.InfectionVectors
 
             if (attacker != null && !attacker.Dead && attacker != this.Pawn)
             {
+                if (attacker.RaceProps.IsMechanoid || attacker.RaceProps.FleshType == FleshTypeDefOf.Normal)
+                {
+                    return;
+                }
+
                 if (Props.onlyMelee)
                 {
                     bool isMeleeAttack = dinfo.Weapon == null || !dinfo.Weapon.IsRangedWeapon;
@@ -70,9 +75,7 @@ namespace DiseasesFramework.InfectionVectors
                 if (Props.respectsToxicResistance)
                 {
                     float bioRes = attacker.GetStatValue(StatDefOf.ToxicResistance);
-
                     float envRes = attacker.GetStatValue(StatDefOf.ToxicEnvironmentResistance);
-
                     float bestProtection = Mathf.Max(bioRes, envRes);
 
                     finalChance *= Mathf.Clamp01(1f - bestProtection);

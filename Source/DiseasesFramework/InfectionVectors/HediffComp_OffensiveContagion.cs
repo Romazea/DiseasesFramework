@@ -36,6 +36,11 @@ namespace DiseasesFramework.InfectionVectors
         {
             if (__instance == null || __instance.Dead || dinfo.Instigator == null) return;
 
+            if (__instance.RaceProps.IsMechanoid || __instance.RaceProps.FleshType == FleshTypeDefOf.Normal)
+            {
+                return;
+            }
+
             Pawn attacker = dinfo.Instigator as Pawn;
             if (attacker == null || attacker == __instance) return;
 
@@ -64,9 +69,7 @@ namespace DiseasesFramework.InfectionVectors
                     if (props.respectsToxicResistance)
                     {
                         float bioRes = __instance.GetStatValue(StatDefOf.ToxicResistance);
-
                         float envRes = __instance.GetStatValue(StatDefOf.ToxicEnvironmentResistance);
-
                         float bestProtection = Mathf.Max(bioRes, envRes);
 
                         finalChance *= Mathf.Clamp01(1f - bestProtection);

@@ -8,15 +8,15 @@
     </supportedVersions>
     <modVersion>1.0.0</modVersion>
     <description>
-    A framework for RimWorld modders. It allows you to create complex diseases, custom methods of contagion, mutations, and specific cures using only XML files.
+A framework for RimWorld modders. It allows you to create complex diseases, custom methods of contagion, mutations, and specific cures using only XML files.
     
-    For Modders
+For Modders
     
-    Check the wiki on GitHub for documentation and examples of XML tags you can use in your own mods.
+Check the wiki on GitHub for documentation and examples of XML tags you can use in your own mods.
     
-    For Players:
+For Players:
     
-    This mod does not add diseases on its own. It is a requirement (dependency) for other mods that use this code. Please place it as high as possible in your load order.
+This mod does not add diseases on its own. It is a requirement (dependency) for other mods that use this code. Please place it as high as possible in your load order.
     </description>
     <modDependencies>
         <li>

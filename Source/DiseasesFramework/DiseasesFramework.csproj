@@ -337,11 +337,13 @@
   <ItemGroup>
     <Compile Include="DiseasesFrameworkCore.cs" />
     <Compile Include="HarmonyPatches\DiseasesFramework_Init.cs" />
+    <Compile Include="HarmonyPatches\Patch_CorpseContagion.cs" />
     <Compile Include="HarmonyPatches\Patch_IngestionContagion.cs" />
     <Compile Include="HarmonyPatches\Pawn_FomiteContagion_Patch.cs" />
     <Compile Include="InfectionVectors\CompFomite.cs" />
     <Compile Include="InfectionVectors\CompContaminatedFood.cs" />
     <Compile Include="InfectionVectors\HediffComp_AuraContagion.cs" />
+    <Compile Include="InfectionVectors\HediffComp_CorpseContagion.cs" />
     <Compile Include="InfectionVectors\HediffComp_DefensiveContagion.cs" />
     <Compile Include="InfectionVectors\HediffComp_FomiteContagion.cs" />
     <Compile Include="InfectionVectors\HediffComp_TemperatureInfection.cs" />

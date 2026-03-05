@@ -57,15 +57,14 @@
             </li>
             <li Class="PatchOperationAdd">
                 <xpath>/Defs/HediffDef[defName="Flu"]/comps</xpath>
-                <li>
+                <value>
                     <li Class="DiseasesFramework.InfectionVectors.HediffCompProperties_FomiteContagion">
                         <contaminateInterval>2500</contaminateInterval>
                         <sendNotification>true</sendNotification>
                         <useLetterInsteadOfMessage>false</useLetterInsteadOfMessage>
                     </li>
-                </li>
-            </value>
-        </li>
-    </operations>
-</Operation>
+                </value>
+            </li>
+        </operations>
+    </Operation>
 </Patch>

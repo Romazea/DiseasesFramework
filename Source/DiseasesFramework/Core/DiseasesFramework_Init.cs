@@ -1,7 +1,8 @@
 ﻿using Verse;
 using HarmonyLib;
+using System.Reflection;
 
-namespace DiseasesFramework
+namespace DiseasesFramework.Core
 {
     [StaticConstructorOnStartup]
     public static class DiseasesFramework_Init
@@ -10,7 +11,7 @@ namespace DiseasesFramework
         {
             Harmony harmony = new Harmony("com.romazea.diseasesframework");
 
-            harmony.PatchAll();
+            harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             Log.Message("<color=cyan>[Disease Framework] Harmony patches applied successfully.</color>");
         }

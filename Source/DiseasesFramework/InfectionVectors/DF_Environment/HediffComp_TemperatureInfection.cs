@@ -1,7 +1,7 @@
 ﻿using Verse;
 using RimWorld;
 
-namespace DiseasesFramework.InfectionVectors
+namespace DiseasesFramework.InfectionVectors.DF_Environment
 {
     public class HediffCompProperties_TemperatureInfection : HediffCompProperties
     {

@@ -1,7 +1,7 @@
 ﻿using Verse;
 using RimWorld;
 
-namespace DiseasesFramework.InfectionVectors
+namespace DiseasesFramework.InfectionVectors.DF_Ingestion
 {
     public class CompProperties_ContaminatedFood : CompProperties
     {

@@ -2,7 +2,7 @@
 using RimWorld;
 using System.Collections.Generic;
 
-namespace DiseasesFramework.InfectionVectors
+namespace DiseasesFramework.InfectionVectors.DF_Environment
 {
     public class HediffCompProperties_AuraContagion : HediffCompProperties
     {

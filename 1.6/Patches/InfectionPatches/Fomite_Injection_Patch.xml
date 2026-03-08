@@ -14,7 +14,7 @@
             <li Class="PatchOperationAdd">
                 <xpath>/Defs/ThingDef[@Name="ApparelBase"]/comps</xpath>
                 <value>
-                    <li Class="DiseasesFramework.InfectionVectors.CompProperties_Fomite">
+                    <li Class="DiseasesFramework.InfectionVectors.DF_Fomites.CompProperties_Fomite">
                         <daysToDecay>2.0</daysToDecay>
                     </li>
                 </value>
@@ -36,7 +36,7 @@
             <li Class="PatchOperationAdd">
                 <xpath>//ThingDef[thingClass="Building_Bed"]/comps</xpath>
                 <value>
-                    <li Class="DiseasesFramework.InfectionVectors.CompProperties_Fomite">
+                    <li Class="DiseasesFramework.InfectionVectors.DF_Fomites.CompProperties_Fomite">
                         <daysToDecay>3.0</daysToDecay>
                     </li>
                 </value>

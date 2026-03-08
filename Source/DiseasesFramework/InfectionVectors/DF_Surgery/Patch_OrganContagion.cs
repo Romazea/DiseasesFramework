@@ -4,7 +4,7 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DiseasesFramework.InfectionVectors;
+using DiseasesFramework.InfectionVectors.DF_Surgery;
 
 namespace DiseasesFramework.HarmonyPatches
 {

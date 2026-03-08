@@ -3,7 +3,7 @@ using Verse;
 using RimWorld;
 using System.Collections.Generic;
 
-namespace DiseasesFramework.HarmonyPatches
+namespace DiseasesFramework.InfectionVectors.DF_Corpses
 {
     [HarmonyPatch(typeof(Pawn), "TickRare")]
     public static class Patch_CorpseContagion
@@ -33,7 +33,7 @@ namespace DiseasesFramework.HarmonyPatches
                 {
                     foreach (Hediff hediff in corpse.InnerPawn.health.hediffSet.hediffs)
                     {
-                        var comp = hediff.TryGetComp<InfectionVectors.HediffComp_CorpseContagion>();
+                        var comp = hediff.TryGetComp<InfectionVectors.DF_Corpses.HediffComp_CorpseContagion>();
                         if (comp != null)
                         {
                             var props = comp.Props;
@@ -57,7 +57,7 @@ namespace DiseasesFramework.HarmonyPatches
             }
         }
 
-        private static void InfectPawn(Pawn pawn, HediffDef disease, InfectionVectors.HediffCompProperties_CorpseContagion props, string corpseName)
+        private static void InfectPawn(Pawn pawn, HediffDef disease, InfectionVectors.DF_Corpses.HediffCompProperties_CorpseContagion props, string corpseName)
         {
             pawn.health.AddHediff(disease);
 

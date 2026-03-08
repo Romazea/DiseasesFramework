@@ -2,7 +2,7 @@
 using RimWorld;
 using HarmonyLib;
 using System.Collections.Generic;
-using DiseasesFramework.InfectionVectors;
+using DiseasesFramework.InfectionVectors.DF_Ingestion;
 
 namespace DiseasesFramework.HarmonyPatches
 {

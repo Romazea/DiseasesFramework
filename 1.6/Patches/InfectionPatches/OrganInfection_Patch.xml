@@ -5,7 +5,7 @@
         <xpath>Defs/ThingDef[@ParentName="BodyPartProstheticImperialBase" or @ParentName="BodyPartBionicImperialBase" or @ParentName="BodyPartRoyalBase" or @ParentName="BodyPartNaturalBase"]</xpath>
         <value>
             <comps>
-                <li Class="DiseasesFramework.InfectionVectors.CompProperties_ContaminatedBodyPart"/>
+                <li Class="DiseasesFramework.InfectionVectors.DF_Surgery.CompProperties_ContaminatedBodyPart"/>
             </comps>
         </value>
     </Operation>
@@ -14,7 +14,7 @@
         <xpath>Defs/HediffDef[defName="Flu"]</xpath>
         <value>
             <comps>
-                <li Class="DiseasesFramework.InfectionVectors.HediffCompProperties_OrganContagion">
+                <li Class="DiseasesFramework.InfectionVectors.DF_Surgery.HediffCompProperties_OrganContagion">
                     <infectionChance>1.0</infectionChance>
                     <sendNotification>true</sendNotification>
                     <useLetterInsteadOfMessage>false</useLetterInsteadOfMessage>

@@ -2,7 +2,7 @@
 using RimWorld;
 using UnityEngine;
 
-namespace DiseasesFramework.InfectionVectors
+namespace DiseasesFramework.InfectionVectors.DF_Combat
 {
     public class HediffCompProperties_DefensiveContagion : HediffCompProperties
     {

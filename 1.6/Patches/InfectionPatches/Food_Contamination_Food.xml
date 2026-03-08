@@ -9,7 +9,7 @@
                 <match Class="PatchOperationAdd">
                     <xpath>/Defs/ThingDef[ingestible/foodType="Meal" or @ParentName="MealBase" or defName="Pemmican" or defName="Kibble"]/comps</xpath>
                     <value>
-                        <li Class="DiseasesFramework.InfectionVectors.CompProperties_ContaminatedFood">
+                        <li Class="DiseasesFramework.InfectionVectors.DF_Ingestion.CompProperties_ContaminatedFood">
                             <sendNotification>true</sendNotification>
                             <useLetterInsteadOfMessage>false</useLetterInsteadOfMessage>
                         </li>
@@ -20,7 +20,7 @@
                     <xpath>/Defs/ThingDef[ingestible/foodType="Meal" or @ParentName="MealBase" or defName="Pemmican" or defName="Kibble"]</xpath>
                     <value>
                         <comps>
-                            <li Class="DiseasesFramework.InfectionVectors.CompProperties_ContaminatedFood">
+                            <li Class="DiseasesFramework.InfectionVectors.DF_Ingestion.CompProperties_ContaminatedFood">
                                 <sendNotification>true</sendNotification>
                                 <useLetterInsteadOfMessage>false</useLetterInsteadOfMessage>
                             </li>

@@ -4,7 +4,7 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DiseasesFramework.InfectionVectors;
+using DiseasesFramework.InfectionVectors.DF_Surgery;
 
 namespace DiseasesFramework.HarmonyPatches
 {
@@ -43,7 +43,6 @@ namespace DiseasesFramework.HarmonyPatches
                     HediffDef disease = comp.ActiveDisease;
                     pawn.health.AddHediff(disease);
 
-                    // Notifications from XML props
                     var props = disease.CompProps<HediffCompProperties_OrganContagion>();
                     if (props != null && props.sendNotification)
                     {

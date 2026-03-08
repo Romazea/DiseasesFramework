@@ -2,7 +2,7 @@
 using Verse;
 using RimWorld;
 
-namespace DiseasesFramework.InfectionVectors
+namespace DiseasesFramework.InfectionVectors.DF_Fomites
 {
     [HarmonyPatch(typeof(Pawn), "TickRare")]
     public static class Pawn_FomiteContagion_Patch

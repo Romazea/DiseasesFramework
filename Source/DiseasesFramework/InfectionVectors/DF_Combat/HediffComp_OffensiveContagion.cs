@@ -4,7 +4,7 @@ using HarmonyLib;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace DiseasesFramework.InfectionVectors
+namespace DiseasesFramework.InfectionVectors.DF_Combat
 {
     public class HediffCompProperties_OffensiveContagion : HediffCompProperties
     {

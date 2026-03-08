@@ -3,9 +3,16 @@ using RimWorld;
 
 namespace DiseasesFramework.InfectionVectors.DF_Ingestion
 {
+    /// <summary>
+    /// XML properties for food contamination.
+    /// Defines how the player is notified when a pawn consumes infected food.
+    /// </summary>
     public class CompProperties_ContaminatedFood : CompProperties
     {
+        /// <summary>Whether to notify the player when a pawn contracts a disease from this food.</summary>
         public bool sendNotification = true;
+
+        /// <summary>If true, sends a Letter; otherwise, a standard Message.</summary>
         public bool useLetterInsteadOfMessage = false;
 
         public CompProperties_ContaminatedFood()
@@ -14,18 +21,32 @@ namespace DiseasesFramework.InfectionVectors.DF_Ingestion
         }
     }
 
+    /// <summary>
+    /// Component that turns a food item into a disease vector.
+    /// Pathogens are stored within the food and transmitted upon ingestion.
+    /// </summary>
     public class CompContaminatedFood : ThingComp
     {
+        /// <summary>The specific disease currently hiding in this food item.</summary>
         public HediffDef linkedDisease;
 
         public CompProperties_ContaminatedFood Props => (CompProperties_ContaminatedFood)this.props;
 
+        /// <summary>
+        /// Saves and loads the linked disease data.
+        /// Essential for keeping food dangerous after a game save/load.
+        /// </summary>
         public override void PostExposeData()
         {
             base.PostExposeData();
             Scribe_Defs.Look(ref linkedDisease, "linkedDisease");
         }
 
+        /// <summary>
+        /// Logic to handle item stacking/splitting.
+        /// Ensures that when a stack of food is split, the new stack inherits the same contamination.
+        /// </summary>
+        /// <param name="piece">The new item stack created from the original.</param>
         public override void PostSplitOff(Thing piece)
         {
             base.PostSplitOff(piece);
@@ -37,12 +58,21 @@ namespace DiseasesFramework.InfectionVectors.DF_Ingestion
             }
         }
 
+        /// <summary>
+        /// Triggered when a pawn finishes eating the item.
+        /// Checks for biological validity and applies the linked disease.
+        /// </summary>
+        /// <param name="ingester">The pawn that consumed the food.</param>
         public override void PostIngested(Pawn ingester)
         {
             base.PostIngested(ingester);
 
             if (linkedDisease == null || ingester == null) return;
+
+            // Only biological (flesh) entities can be infected by food.
             if (!ingester.RaceProps.IsFlesh) return;
+
+            // Avoid reapplying if the pawn already has the disease.
             if (ingester.health.hediffSet.HasHediff(linkedDisease)) return;
 
             ingester.health.AddHediff(linkedDisease);
@@ -62,6 +92,10 @@ namespace DiseasesFramework.InfectionVectors.DF_Ingestion
             }
         }
 
+        /// <summary>
+        /// Adds a custom debug button in Dev Mode.
+        /// Allows Blaxer Studios developers to manually infect food for testing purposes.
+        /// </summary>
         public override System.Collections.Generic.IEnumerable<Gizmo> CompGetGizmosExtra()
         {
             if (Prefs.DevMode)

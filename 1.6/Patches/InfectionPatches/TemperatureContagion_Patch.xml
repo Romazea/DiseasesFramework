@@ -18,7 +18,6 @@
                     </value>
                 </nomatch>
             </li>
-
             <li Class="PatchOperationConditional">
                 <xpath>/Defs/HediffDef[defName="Heatstroke"]/comps</xpath>
                 <nomatch Class="PatchOperationAdd">
@@ -29,19 +28,29 @@
                 </nomatch>
             </li>
 
-            <li Class="PatchOperationAdd">
-                <xpath>/Defs/HediffDef[defName="Heatstroke"]/comps</xpath>
-                <value>
-                    <li Class="DiseasesFramework.InfectionVectors.HediffCompProperties_TemperatureInfection">
-                        <minSeverity>0.35</minSeverity>
-                        <diseaseToApply IsNull="True" />
-                        <!-- If you want to assign a heatstroke illness, you must close the label and assign the illness -->
-                        <chancePerCheck>1.0</chancePerCheck>
-                        <checkInterval>60</checkInterval>
-                        <sendNotification>true</sendNotification>
-                        <useLetterInsteadOfMessage>true</useLetterInsteadOfMessage>
-                    </li>
-                </value>
+            <li Class="PatchOperationConditional">
+                <xpath>/Defs/HediffDef[defName="Hypothermia"]/hediffClass</xpath>
+                <match Class="PatchOperationReplace">
+                    <xpath>/Defs/HediffDef[defName="Hypothermia"]/hediffClass</xpath>
+                    <value>
+                        <hediffClass>HediffWithComps</hediffClass>
+                    </value>
+                </match>
+                <nomatch Class="PatchOperationAdd">
+                    <xpath>/Defs/HediffDef[defName="Hypothermia"]</xpath>
+                    <value>
+                        <hediffClass>HediffWithComps</hediffClass>
+                    </value>
+                </nomatch>
+            </li>
+            <li Class="PatchOperationConditional">
+                <xpath>/Defs/HediffDef[defName="Hypothermia"]/comps</xpath>
+                <nomatch Class="PatchOperationAdd">
+                    <xpath>/Defs/HediffDef[defName="Hypothermia"]</xpath>
+                    <value>
+                        <comps />
+                    </value>
+                </nomatch>
             </li>
 
         </operations>

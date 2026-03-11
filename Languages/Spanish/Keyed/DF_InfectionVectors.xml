@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+    <!-- DefensiveContagion -->
+    <DF_DefensiveInfection_Message>{0} se ha infectado por contacto físico con sangre o tejido contaminado.</DF_DefensiveInfection_Message>
+    <DF_DefensiveInfection_LetterLabel>¡Infección en combate!</DF_DefensiveInfection_LetterLabel>
+    <!-- OffensiveContagion -->
+    <DF_OffensiveInfection_Message>{0} se ha infectado tras ser atacado por {1}.</DF_OffensiveInfection_Message>
+    <DF_OffensiveInfection_LetterLabel>¡Infección ofensiva!</DF_OffensiveInfection_LetterLabel>
+    <!-- CorpseContagion -->
+    <DF_CorpseInfection_Message>{0} ha contraído {1} debido a la exposición a un cadáver infectado ({2}).</DF_CorpseInfection_Message>
+    <DF_CorpseInfection_LetterLabel>Infección por cadáver</DF_CorpseInfection_LetterLabel>
+    <!-- AuraContagion -->
+    <DF_AuraInfection_Message>{0} ha contraído {1} por proximidad.</DF_AuraInfection_Message>
+    <DF_AuraInfection_LetterLabel>¡Nueva infección!</DF_AuraInfection_LetterLabel>
+    <!-- TemperatureContagion -->
+    <DF_TempInfection_Message>{0} ha contraído {1} debido a una exposición ambiental severa.</DF_TempInfection_Message>
+    <DF_TempInfection_LetterLabel>Riesgo de enfermedad</DF_TempInfection_LetterLabel>
+    <!-- FomiteContagion -->
+    <DF_FomiteInfection_Message>{0} ha contraído {1} al entrar en contacto con un objeto contaminado ({2}).</DF_FomiteInfection_Message>
+    <DF_FomiteInfection_LetterLabel>Infección por contacto</DF_FomiteInfection_LetterLabel>
+    <!-- IngestionContagion -->
+    <DF_FoodInfection_Message>{0} ha contraído {1} tras ingerir alimento contaminado.</DF_FoodInfection_Message>
+    <DF_FoodInfection_LetterLabel>¡Alimento contaminado!</DF_FoodInfection_LetterLabel>
+    <!-- SurgeryContagion -->
+    <DF_Surgery_ContaminatedStatus>Contaminado: {0}</DF_Surgery_ContaminatedStatus>
+    <DF_SurgicalInfection_Message>{0} ha sido infectado con {1} durante la cirugía.</DF_SurgicalInfection_Message>
+    <DF_NaturalOrganInfection_Message>{0} ha sido infectado con {1} durante un trasplante de órgano.</DF_NaturalOrganInfection_Message>
+    <DF_SurgicalInfection_LetterLabel>Infección quirúrgica</DF_SurgicalInfection_LetterLabel>
+    <!-- ZoonosisContagion -->
+    <DF_ZoonosisInfection_Message>{0} ha contraído {1} al interactuar con un animal infectado ({2}).</DF_ZoonosisInfection_Message>
+    <DF_ZoonosisInfection_LetterLabel>Infección zoonótica</DF_ZoonosisInfection_LetterLabel>
+
+</LanguageData>

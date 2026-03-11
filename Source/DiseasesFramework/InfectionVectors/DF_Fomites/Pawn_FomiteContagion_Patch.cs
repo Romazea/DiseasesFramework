@@ -91,8 +91,11 @@ namespace DiseasesFramework.InfectionVectors.DF_Fomites
 
                     if (sendNotif)
                     {
-                        string title = "Contact infection";
-                        string text = $"{pawn.LabelShort} has contracted {disease.label} through contact with a contaminated object ({sourceName}).";
+                        // {0} = Pawn name
+                        // {1} = Disease label
+                        // {2} = Source object name (Bed or Apparel)
+                        string text = "DF_FomiteInfection_Message".Translate(pawn.LabelShort, disease.label, sourceName);
+                        string title = "DF_FomiteInfection_LetterLabel".Translate();
 
                         if (useLetter)
                         {

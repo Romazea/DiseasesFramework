@@ -91,11 +91,16 @@ namespace DiseasesFramework.InfectionVectors.DF_Corpses
 
             if (props.sendNotification && pawn.Faction == Faction.OfPlayer)
             {
-                string text = $"{pawn.LabelShort} has contracted {disease.label} from exposure to an infected corpse ({corpseName}).";
+                // We pass three arguments: 
+                // {0} = Pawn name
+                // {1} = Disease label (translated automatically by the game)
+                // {2} = Name of the deceased
+                string text = "DF_CorpseInfection_Message".Translate(pawn.LabelShort, disease.label, corpseName);
+                string label = "DF_CorpseInfection_LetterLabel".Translate();
 
                 if (props.useLetterInsteadOfMessage)
                 {
-                    Find.LetterStack.ReceiveLetter("Corpse Infection", text, LetterDefOf.NegativeEvent, pawn);
+                    Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.NegativeEvent, pawn);
                 }
                 else
                 {

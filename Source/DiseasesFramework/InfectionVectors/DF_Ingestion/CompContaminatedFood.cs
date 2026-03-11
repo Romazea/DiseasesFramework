@@ -79,11 +79,14 @@ namespace DiseasesFramework.InfectionVectors.DF_Ingestion
 
             if (Props.sendNotification && ingester.Faction == Faction.OfPlayer)
             {
-                string text = $"{ingester.LabelShort} contracted {linkedDisease.label} from contaminated food.";
+                // {0} = Ingester pawn name
+                // {1} = Linked disease label
+                string text = "DF_FoodInfection_Message".Translate(ingester.LabelShort, linkedDisease.label);
+                string label = "DF_FoodInfection_LetterLabel".Translate();
 
                 if (Props.useLetterInsteadOfMessage)
                 {
-                    Find.LetterStack.ReceiveLetter("Food Contamination!", text, LetterDefOf.NegativeEvent, ingester);
+                    Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.NegativeEvent, ingester);
                 }
                 else
                 {

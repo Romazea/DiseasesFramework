@@ -44,8 +44,10 @@ namespace DiseasesFramework.HarmonyPatches
                         // Feedback logic based on XML configuration.
                         if (props != null && props.sendNotification)
                         {
-                            string text = $"{pawn.LabelShort} has been infected with {disease.label} during organ transplantation.";
-                            string title = "Surgical Infection";
+                            // {0} = Patient name
+                            // {1} = Disease label
+                            string text = "DF_NaturalOrganInfection_Message".Translate(pawn.LabelShort, disease.label);
+                            string title = "DF_NaturalOrganInfection_LetterLabel".Translate();
 
                             if (props.useLetterInsteadOfMessage)
                             {

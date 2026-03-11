@@ -61,8 +61,10 @@ namespace DiseasesFramework.HarmonyPatches
                     var props = disease.CompProps<HediffCompProperties_OrganContagion>();
                     if (props != null && props.sendNotification)
                     {
-                        string text = $"{pawn.LabelShort} has been infected with {disease.label} during surgery.";
-                        string title = "Surgical Infection";
+                        // {0} = Patient name
+                        // {1} = Disease label
+                        string text = "DF_SurgicalInfection_Message".Translate(pawn.Label, disease.label);
+                        string title = "DF_SurgicalInfection_LetterLabel".Translate();
 
                         if (props.useLetterInsteadOfMessage)
                         {

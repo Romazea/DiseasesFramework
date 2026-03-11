@@ -127,12 +127,19 @@ namespace DiseasesFramework.InfectionVectors.DF_Environment
 
                         if (Props.sendNotification && targetPawn.Faction == Faction.OfPlayer)
                         {
-                            string text = $"{targetPawn.LabelShort} has caught {Props.hediffToApply.label} through proximity.";
+                            // {0} = Target pawn name
+                            // {1} = Disease label
+                            string text = "DF_AuraInfection_Message".Translate(targetPawn.LabelShort, Props.hediffToApply.label);
+                            string label = "DF_AuraInfection_LetterLabel".Translate();
 
                             if (Props.useLetterInsteadOfMessage)
-                                Find.LetterStack.ReceiveLetter("New Infection!", text, LetterDefOf.NegativeEvent, targetPawn);
+                            {
+                                Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.NegativeEvent, targetPawn);
+                            }
                             else
+                            {
                                 Messages.Message(text, targetPawn, MessageTypeDefOf.NegativeEvent, true);
+                            }
                         }
                     }
                 }

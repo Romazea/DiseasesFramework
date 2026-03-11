@@ -118,11 +118,12 @@ namespace DiseasesFramework.InfectionVectors.DF_Combat
 
                         if (props.sendNotification && __instance.Faction == Faction.OfPlayer)
                         {
-                            string text = __instance.LabelShort + " was infected by an attack from " + attacker.LabelShort + ".";
+                            string text = "DF_OffensiveInfection_Message".Translate(__instance.LabelShort, attacker.LabelShort);
+                            string label = "DF_OffensiveInfection_LetterLabel".Translate();
 
                             if (props.useLetterInsteadOfMessage)
                             {
-                                Find.LetterStack.ReceiveLetter("Offensive Infection!", text, LetterDefOf.NegativeEvent, __instance);
+                                Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.NegativeEvent, __instance);
                             }
                             else
                             {

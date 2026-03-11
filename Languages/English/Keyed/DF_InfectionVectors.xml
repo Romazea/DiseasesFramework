@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+    <!-- DefensiveContagion -->
+    <DF_DefensiveInfection_Message>{0} was infected by physical contact with contaminated blood/tissue.</DF_DefensiveInfection_Message>
+    <DF_DefensiveInfection_LetterLabel>Combat Infection!</DF_DefensiveInfection_LetterLabel>
+    <!-- OffensiveContagion -->
+    <DF_OffensiveInfection_Message>{0} was infected by an attack from {1}.</DF_OffensiveInfection_Message>
+    <DF_OffensiveInfection_LetterLabel>Offensive Infection!</DF_OffensiveInfection_LetterLabel>
+    <!-- CorpseContagion -->
+    <DF_CorpseInfection_Message>{0} has contracted {1} from exposure to an infected corpse ({2}).</DF_CorpseInfection_Message>
+    <DF_CorpseInfection_LetterLabel>Corpse Infection</DF_CorpseInfection_LetterLabel>
+    <!-- AuraContagion -->
+    <DF_AuraInfection_Message>{0} has caught {1} through proximity.</DF_AuraInfection_Message>
+    <DF_AuraInfection_LetterLabel>New Infection!</DF_AuraInfection_LetterLabel>
+    <!-- TemperatureContagion -->
+    <DF_TempInfection_Message>{0} has contracted {1} due to severe exposure.</DF_TempInfection_Message>
+    <DF_TempInfection_LetterLabel>Disease Risk</DF_TempInfection_LetterLabel>
+    <!-- FomiteContagion -->
+    <DF_FomiteInfection_Message>{0} has contracted {1} through contact with a contaminated object ({2}).</DF_FomiteInfection_Message>
+    <DF_FomiteInfection_LetterLabel>Contact infection</DF_FomiteInfection_LetterLabel>
+    <!-- IngestionContagion -->
+    <DF_FoodInfection_Message>{0} contracted {1} from contaminated food.</DF_FoodInfection_Message>
+    <DF_FoodInfection_LetterLabel>Food Contamination!</DF_FoodInfection_LetterLabel>
+    <!-- SurgeryContagion -->
+    <DF_Surgery_ContaminatedStatus>Contaminated: {0}</DF_Surgery_ContaminatedStatus>
+    <DF_SurgicalInfection_Message>{0} has been infected with {1} during surgery.</DF_SurgicalInfection_Message>
+    <DF_SurgicalInfection_LetterLabel>Surgical Infection</DF_SurgicalInfection_LetterLabel>
+    <DF_NaturalOrganInfection_Message>{0} has been infected with {1} during organ transplantation.</DF_NaturalOrganInfection_Message>
+    <DF_NaturalOrganInfection_LetterLabel>Surgical Infection</DF_NaturalOrganInfection_LetterLabel>
+    <!-- ZoonosisContagion -->
+    <DF_ZoonosisInfection_Message>{0} has contracted {1} from interacting with an infected animal ({2}).</DF_ZoonosisInfection_Message>
+    <DF_ZoonosisInfection_LetterLabel>Zoonotic Infection</DF_ZoonosisInfection_LetterLabel>
+
+</LanguageData>

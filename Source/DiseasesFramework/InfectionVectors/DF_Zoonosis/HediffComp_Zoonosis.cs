@@ -70,12 +70,15 @@ namespace DiseasesFramework.InfectionVectors.DF_Zoonosis
 
                     if (Props.sendNotification && human.Faction == Faction.OfPlayer)
                     {
-                        string animalName = this.Pawn.LabelShort;
-                        string text = $"{human.LabelShort} has contracted {diseaseToGive.label} from interacting with an infected animal ({animalName}).";
+                        // {0} = Human Pawn name
+                        // {1} = Disease label
+                        // {2} = Animal name
+                        string text = "DF_ZoonosisInfection_Message".Translate(human.LabelShort, diseaseToGive.label, this.Pawn.LabelShort);
+                        string label = "DF_ZoonosisInfection_LetterLabel".Translate();
 
                         if (Props.useLetterInsteadOfMessage)
                         {
-                            Find.LetterStack.ReceiveLetter("Zoonotic Infection", text, LetterDefOf.NegativeEvent, human);
+                            Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.NegativeEvent, human);
                         }
                         else
                         {

@@ -77,11 +77,14 @@ namespace DiseasesFramework.InfectionVectors.DF_Environment
 
                 if (Props.sendNotification && Pawn.Faction == Faction.OfPlayer)
                 {
-                    string text = $"{Pawn.LabelShort} has contracted {Props.diseaseToApply.label} due to severe exposure.";
+                    // {0} = Pawn name
+                    // {1} = Secondary disease label
+                    string text = "DF_TempInfection_Message".Translate(Pawn.LabelShort, Props.diseaseToApply.label);
+                    string label = "DF_TempInfection_LetterLabel".Translate();
 
                     if (Props.useLetterInsteadOfMessage)
                     {
-                        Find.LetterStack.ReceiveLetter("Disease Risk", text, LetterDefOf.NegativeEvent, Pawn);
+                        Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.NegativeEvent, Pawn);
                     }
                     else
                     {

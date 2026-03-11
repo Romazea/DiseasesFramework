@@ -57,8 +57,8 @@ namespace DiseasesFramework.InfectionVectors.DF_Surgery
         {
             if (IsContaminated())
             {
-                // Note: Using "label" ensures the name is translated to the user's language.
-                return "Contaminated: " + activeDisease.label;
+                // We use the key from the XML and pass the disease label as {0}
+                return "DF_Surgery_ContaminatedStatus".Translate(activeDisease.label);
             }
             return null;
         }

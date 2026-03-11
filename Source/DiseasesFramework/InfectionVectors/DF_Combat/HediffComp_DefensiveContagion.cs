@@ -105,12 +105,17 @@ namespace DiseasesFramework.InfectionVectors.DF_Combat
 
                     if (Props.sendNotification && attacker.Faction == Faction.OfPlayer)
                     {
-                        string text = $"{attacker.LabelShort} was infected by physical contact with contaminated blood/tissue.";
+                        string text = "DF_DefensiveInfection_Message".Translate(attacker.LabelShort);
+                        string label = "DF_DefensiveInfection_LetterLabel".Translate();
 
                         if (Props.useLetterInsteadOfMessage)
-                            Find.LetterStack.ReceiveLetter("Combat Infection!", text, LetterDefOf.NegativeEvent, attacker);
+                        {
+                            Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.NegativeEvent, attacker);
+                        }
                         else
+                        {
                             Messages.Message(text, attacker, MessageTypeDefOf.NegativeEvent, true);
+                        }
                     }
                 }
             }

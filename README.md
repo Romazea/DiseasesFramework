@@ -31,8 +31,8 @@ To use the shared behaviors and infection vectors of this framework in your own 
   <li>
     <packageId>BlaxerStudios.DiseasesFramework.Core</packageId>
     <displayName>Diseases Framework</displayName>
-    <steamWorkshopUrl>PENDING_URL</steamWorkshopUrl>
-    <downloadUrl>[https://github.com/Blaxer-Studios/DiseasesFramework](https://github.com/Blaxer-Studios/DiseasesFramework)</downloadUrl>
+    <steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=3683664569</steamWorkshopUrl>
+    <downloadUrl>https://github.com/Blaxer-Studios/DiseasesFramework</downloadUrl>
   </li>
 </modDependencies>
 ```

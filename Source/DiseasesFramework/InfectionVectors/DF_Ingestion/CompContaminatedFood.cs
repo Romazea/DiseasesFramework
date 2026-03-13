@@ -1,14 +1,18 @@
 ﻿using Verse;
 using RimWorld;
+using UnityEngine;
 
 namespace DiseasesFramework.InfectionVectors.DF_Ingestion
 {
     /// <summary>
     /// XML properties for food contamination.
-    /// Defines how the player is notified when a pawn consumes infected food.
+    /// Defines how the player is notified and how the infection probability scales.
     /// </summary>
     public class CompProperties_ContaminatedFood : CompProperties
     {
+        /// <summary>Base chance multiplier. 1.0 means 100% chance per full serving. Scales with amount eaten.</summary>
+        public float baseInfectionWeight = 1.0f;
+
         /// <summary>Whether to notify the player when a pawn contracts a disease from this food.</summary>
         public bool sendNotification = true;
 
@@ -46,7 +50,6 @@ namespace DiseasesFramework.InfectionVectors.DF_Ingestion
         /// Logic to handle item stacking/splitting.
         /// Ensures that when a stack of food is split, the new stack inherits the same contamination.
         /// </summary>
-        /// <param name="piece">The new item stack created from the original.</param>
         public override void PostSplitOff(Thing piece)
         {
             base.PostSplitOff(piece);
@@ -60,7 +63,7 @@ namespace DiseasesFramework.InfectionVectors.DF_Ingestion
 
         /// <summary>
         /// Triggered when a pawn finishes eating the item.
-        /// Checks for biological validity and applies the linked disease.
+        /// Now applies infection probability based on the 'baseInfectionWeight' property.
         /// </summary>
         /// <param name="ingester">The pawn that consumed the food.</param>
         public override void PostIngested(Pawn ingester)
@@ -75,29 +78,33 @@ namespace DiseasesFramework.InfectionVectors.DF_Ingestion
             // Avoid reapplying if the pawn already has the disease.
             if (ingester.health.hediffSet.HasHediff(linkedDisease)) return;
 
-            ingester.health.AddHediff(linkedDisease);
-
-            if (Props.sendNotification && ingester.Faction == Faction.OfPlayer)
+            // CALCULATION: Apply infection chance roll. 
+            // We use Mathf.Clamp01 to ensure the chance is always valid between 0 and 1.
+            if (Rand.Chance(Mathf.Clamp01(Props.baseInfectionWeight)))
             {
-                // {0} = Ingester pawn name
-                // {1} = Linked disease label
-                string text = "DF_FoodInfection_Message".Translate(ingester.LabelShort, linkedDisease.label);
-                string label = "DF_FoodInfection_LetterLabel".Translate();
+                ingester.health.AddHediff(linkedDisease);
 
-                if (Props.useLetterInsteadOfMessage)
+                if (Props.sendNotification && ingester.Faction == Faction.OfPlayer)
                 {
-                    Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.NegativeEvent, ingester);
-                }
-                else
-                {
-                    Messages.Message(text, ingester, MessageTypeDefOf.NegativeEvent, true);
+                    // {0} = Ingester pawn name, {1} = Linked disease label
+                    string text = "DF_FoodInfection_Message".Translate(ingester.LabelShort, linkedDisease.label);
+                    string label = "DF_FoodInfection_LetterLabel".Translate();
+
+                    if (Props.useLetterInsteadOfMessage)
+                    {
+                        Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.NegativeEvent, ingester);
+                    }
+                    else
+                    {
+                        Messages.Message(text, ingester, MessageTypeDefOf.NegativeEvent, true);
+                    }
                 }
             }
         }
 
         /// <summary>
         /// Adds a custom debug button in Dev Mode.
-        /// Allows Blaxer Studios developers to manually infect food for testing purposes.
+        /// Allows developers to manually infect food for testing purposes.
         /// </summary>
         public override System.Collections.Generic.IEnumerable<Gizmo> CompGetGizmosExtra()
         {

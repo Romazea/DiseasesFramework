@@ -56,7 +56,7 @@ namespace DiseasesFramework.HarmonyPatches
                     if (foodComp != null && Rand.Chance(contagionComp.Props.contaminationChance))
                     {
                         // Transfer the specific disease from the worker to the food item.
-                        foodComp.linkedDisease = contagionComp.Props.hediffToApply;
+                        foodComp.linkedDisease = contagionComp.Props.hediffToApply ?? contagionComp.parent.def;
                     }
                     else if (foodComp == null)
                     {

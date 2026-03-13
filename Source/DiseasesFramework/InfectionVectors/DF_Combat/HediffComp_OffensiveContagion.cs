@@ -24,6 +24,12 @@ namespace DiseasesFramework.InfectionVectors.DF_Combat
         /// <summary>If true, the attack must deal actual damage to trigger the infection check.</summary>
         public bool requiresDamageToPenetrate = true;
 
+        /// <summary>If true, the infection will be applied to the specific body part that was hit. Allows for medical amputations.</summary>
+        public bool transmitToHitPart = true;
+
+        /// <summary>If true, the infection chance is multiplied by the attacker's current disease severity.</summary>
+        public bool scaleWithSeverity = false;
+
         /// <summary>If true, the victim's Toxic Resistance stats will reduce the infection chance.</summary>
         public bool respectsToxicResistance = false;
 
@@ -41,7 +47,7 @@ namespace DiseasesFramework.InfectionVectors.DF_Combat
 
     /// <summary>
     /// Component that marks a disease as "infectious through attacks."
-    /// It doesn't contain logic on its own, but it's used by the Harmony Patch to identify infectious attackers.
+    /// Used by the Harmony Patch to identify infectious attackers.
     /// </summary>
     public class HediffComp_OffensiveContagion : HediffComp
     {
@@ -49,8 +55,7 @@ namespace DiseasesFramework.InfectionVectors.DF_Combat
     }
 
     /// <summary>
-    /// Harmony patch that intercepts any damage applied to a Pawn.
-    /// If the attacker has a disease with OffensiveContagion, it attempts to infect the target.
+    /// Harmony patch that intercepts any damage applied to a Pawn to check for contagion.
     /// </summary>
     [HarmonyPatch(typeof(Pawn), nameof(Pawn.PostApplyDamage))]
     public static class Patch_Pawn_PostApplyDamage_OffensiveContagion
@@ -58,24 +63,18 @@ namespace DiseasesFramework.InfectionVectors.DF_Combat
         /// <summary>
         /// Postfix that runs after damage is dealt.
         /// </summary>
-        /// <param name="__instance">The pawn being attacked (the potential victim).</param>
-        /// <param name="dinfo">Information about the attack.</param>
-        /// <param name="totalDamageDealt">The actual amount of damage that got through armor.</param>
         public static void Postfix(Pawn __instance, DamageInfo dinfo, float totalDamageDealt)
         {
-            // Safety check: Ensure the victim exists and there is an instigator (attacker).
+            // Valid victim and instigator check
             if (__instance == null || __instance.Dead || dinfo.Instigator == null) return;
 
-            // We abort the infection if the target is a machine or has non-biological/special flesh.
-            if (__instance.RaceProps.IsMechanoid || __instance.RaceProps.FleshType != FleshTypeDefOf.Normal)
-            {
-                return;
-            }
+            // Biological entity check (excludes mechs and special flesh types)
+            if (__instance.RaceProps.IsMechanoid || __instance.RaceProps.FleshType != FleshTypeDefOf.Normal) return;
 
             Pawn attacker = dinfo.Instigator as Pawn;
             if (attacker == null || attacker == __instance) return;
 
-            // Loop through all diseases the attacker has to find OffensiveContagion components.
+            // Iterate through attacker's diseases to find infectious components
             List<Hediff> attackerHediffs = attacker.health.hediffSet.hediffs;
             for (int i = 0; i < attackerHediffs.Count; i++)
             {
@@ -86,36 +85,50 @@ namespace DiseasesFramework.InfectionVectors.DF_Combat
                     var props = comp.Props;
                     if (props.hediffToApply == null) continue;
 
-                    // Condition: Check if damage was required.
+                    // Skip if damage was required but not dealt
                     if (props.requiresDamageToPenetrate && totalDamageDealt <= 0f) continue;
 
-                    // Condition: Check if it's a melee attack.
+                    // Melee safety check: Filters out explosions and ranged projectiles
                     if (props.onlyMelee)
                     {
-                        bool isMeleeAttack = dinfo.Weapon == null || !dinfo.Weapon.IsRangedWeapon;
-                        if (!isMeleeAttack) continue;
+                        if (dinfo.Def.isExplosive || (dinfo.Weapon != null && dinfo.Weapon.IsRangedWeapon)) continue;
+                        if (dinfo.WeaponBodyPartGroup == null && dinfo.Weapon == null) continue;
                     }
 
-                    // Condition: Don't infect if the target already has that specific disease.
+                    // Prevent duplicate infections of the same type
                     if (__instance.health.hediffSet.HasHediff(props.hediffToApply)) continue;
 
                     float finalChance = props.infectionChance;
 
-                    // Mitigation check.
+                    // Severity Scaling: More advanced disease stages result in higher infectivity
+                    if (props.scaleWithSeverity)
+                    {
+                        finalChance *= comp.parent.Severity;
+                    }
+
+                    // Toxic Resistance mitigation
                     if (props.respectsToxicResistance)
                     {
                         float bioRes = __instance.GetStatValue(StatDefOf.ToxicResistance);
                         float envRes = __instance.GetStatValue(StatDefOf.ToxicEnvironmentResistance);
                         float bestProtection = Mathf.Max(bioRes, envRes);
-
                         finalChance *= Mathf.Clamp01(1f - bestProtection);
                     }
 
-                    // Final roll.
+                    // Perform the biological roll
                     if (Rand.Chance(finalChance))
                     {
-                        __instance.health.AddHediff(props.hediffToApply);
+                        // Target hit part logic: applies infection to the limb that was struck
+                        if (props.transmitToHitPart && dinfo.HitPart != null)
+                        {
+                            __instance.health.AddHediff(props.hediffToApply, dinfo.HitPart);
+                        }
+                        else
+                        {
+                            __instance.health.AddHediff(props.hediffToApply); // Fallback to whole body
+                        }
 
+                        // Player notifications
                         if (props.sendNotification && __instance.Faction == Faction.OfPlayer)
                         {
                             string text = "DF_OffensiveInfection_Message".Translate(__instance.LabelShort, attacker.LabelShort);

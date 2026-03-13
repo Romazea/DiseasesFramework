@@ -18,6 +18,18 @@ namespace DiseasesFramework.InfectionVectors.DF_Corpses
         /// <summary>If true, the infection cannot pass through walls or solid objects.</summary>
         public bool requireLineOfSight = true;
 
+        /// <summary>Can the corpse infect others immediately after death?</summary>
+        public bool activeWhenFresh = true;
+
+        /// <summary>Can the corpse infect others while rotting and emitting miasma?</summary>
+        public bool activeWhenRotting = true;
+
+        /// <summary>Can the corpse infect others when reduced to a skeleton?</summary>
+        public bool activeWhenDessicated = false;
+
+        /// <summary>If true, gas masks and toxic resistance stats reduce the infection chance.</summary>
+        public bool respectsToxicResistance = true;
+
         /// <summary>Whether to notify the player when a colonist contracts a disease from a corpse.</summary>
         public bool sendNotification = true;
 

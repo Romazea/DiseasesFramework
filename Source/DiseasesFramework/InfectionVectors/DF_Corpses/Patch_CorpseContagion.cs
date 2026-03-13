@@ -2,6 +2,7 @@
 using Verse;
 using RimWorld;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DiseasesFramework.InfectionVectors.DF_Corpses
 {
@@ -24,7 +25,7 @@ namespace DiseasesFramework.InfectionVectors.DF_Corpses
             if (__instance == null || !__instance.Spawned || __instance.Dead || !__instance.RaceProps.Humanlike)
                 return;
 
-            // Further optimization: only run the scan once every 2500 ticks (approx. 1 in-game hour).
+            // Further optimization: only run the radial scan once every 2500 ticks (approx. 1 in-game hour).
             if (__instance.IsHashIntervalTick(2500))
             {
                 ScanForInfectedCorpses(__instance);
@@ -33,7 +34,7 @@ namespace DiseasesFramework.InfectionVectors.DF_Corpses
 
         /// <summary>
         /// Performs a radial search for corpses within range of the healthy pawn.
-        /// If a corpse has a disease with the CorpseContagion component, it calculates the infection risk.
+        /// Evaluates rot stages, line of sight, and toxic resistance before applying the infection.
         /// </summary>
         /// <param name="healthyPawn">The pawn to be tested for exposure.</param>
         private static void ScanForInfectedCorpses(Pawn healthyPawn)
@@ -41,8 +42,6 @@ namespace DiseasesFramework.InfectionVectors.DF_Corpses
             // Maximum search distance for any potential corpse. 
             // Individual corpse contagion radii are capped by this value during the initial scan.
             float maxSearchRadius = 10f;
-
-            // Get all things (including corpses) in a 10-tile radius.
             IEnumerable<Thing> thingsInRadius = GenRadial.RadialDistinctThingsAround(healthyPawn.Position, healthyPawn.Map, maxSearchRadius, true);
 
             foreach (Thing thing in thingsInRadius)
@@ -55,10 +54,25 @@ namespace DiseasesFramework.InfectionVectors.DF_Corpses
                     // Check every disease the corpse had at the time of death.
                     foreach (Hediff hediff in corpse.InnerPawn.health.hediffSet.hediffs)
                     {
-                        var comp = hediff.TryGetComp<InfectionVectors.DF_Corpses.HediffComp_CorpseContagion>();
+                        var comp = hediff.TryGetComp<HediffComp_CorpseContagion>();
                         if (comp != null)
                         {
                             var props = comp.Props;
+
+                            // 1. Verify the putrefaction (rot) stage
+                            CompRottable rotComp = corpse.TryGetComp<CompRottable>();
+                            if (rotComp != null)
+                            {
+                                // Skip if the XML properties disable infection for the corpse's current state
+                                if (!props.activeWhenFresh && rotComp.Stage == RotStage.Fresh) continue;
+                                if (!props.activeWhenRotting && rotComp.Stage == RotStage.Rotting) continue;
+                                if (!props.activeWhenDessicated && rotComp.Stage == RotStage.Dessicated) continue;
+                            }
+                            else
+                            {
+                                // If the corpse cannot rot (e.g., mechanoids or special races), assume it is fresh
+                                if (!props.activeWhenFresh) continue;
+                            }
 
                             // Check if the healthy pawn is within the specific contagion radius of this disease.
                             if (healthyPawn.Position.DistanceTo(corpse.Position) <= props.radius)
@@ -69,11 +83,28 @@ namespace DiseasesFramework.InfectionVectors.DF_Corpses
                                     continue;
                                 }
 
-                                // Apply infection if the pawn isn't already sick and the RNG roll succeeds.
-                                if (!healthyPawn.health.hediffSet.HasHediff(hediff.def) && Rand.Chance(props.infectionChance))
+                                // Proceed only if the pawn isn't already sick with this specific disease.
+                                if (!healthyPawn.health.hediffSet.HasHediff(hediff.def))
                                 {
-                                    InfectPawn(healthyPawn, hediff.def, props, corpse.InnerPawn.LabelShort);
-                                    return; // Stop scanning once an infection is applied to prevent multi-infection in one tick.
+                                    float finalChance = props.infectionChance;
+
+                                    // 2. Mitigation via toxic resistance / gas masks
+                                    if (props.respectsToxicResistance)
+                                    {
+                                        float bioRes = healthyPawn.GetStatValue(StatDefOf.ToxicResistance);
+                                        float envRes = healthyPawn.GetStatValue(StatDefOf.ToxicEnvironmentResistance);
+                                        float bestProtection = Mathf.Max(bioRes, envRes);
+
+                                        // Reduce infection chance based on the pawn's best toxic protection
+                                        finalChance *= Mathf.Clamp01(1f - bestProtection);
+                                    }
+
+                                    // Perform the biological roll
+                                    if (Rand.Chance(finalChance))
+                                    {
+                                        InfectPawn(healthyPawn, hediff.def, props, corpse.InnerPawn.LabelShort);
+                                        return; // Stop scanning once an infection is applied to prevent multi-infection in one tick.
+                                    }
                                 }
                             }
                         }
@@ -85,16 +116,20 @@ namespace DiseasesFramework.InfectionVectors.DF_Corpses
         /// <summary>
         /// Final execution of the infection. Adds the hediff and handles player notifications.
         /// </summary>
-        private static void InfectPawn(Pawn pawn, HediffDef disease, InfectionVectors.DF_Corpses.HediffCompProperties_CorpseContagion props, string corpseName)
+        /// <param name="pawn">The pawn receiving the infection.</param>
+        /// <param name="disease">The specific disease (HediffDef) to apply.</param>
+        /// <param name="props">The component properties dictating notification settings.</param>
+        /// <param name="corpseName">The name of the deceased pawn that transmitted the disease.</param>
+        private static void InfectPawn(Pawn pawn, HediffDef disease, HediffCompProperties_CorpseContagion props, string corpseName)
         {
             pawn.health.AddHediff(disease);
 
             if (props.sendNotification && pawn.Faction == Faction.OfPlayer)
             {
-                // We pass three arguments: 
-                // {0} = Pawn name
-                // {1} = Disease label (translated automatically by the game)
-                // {2} = Name of the deceased
+                // Pass three arguments for translation: 
+                // {0} = Target pawn name
+                // {1} = Disease label (translated automatically)
+                // {2} = Name of the deceased carrier
                 string text = "DF_CorpseInfection_Message".Translate(pawn.LabelShort, disease.label, corpseName);
                 string label = "DF_CorpseInfection_LetterLabel".Translate();
 

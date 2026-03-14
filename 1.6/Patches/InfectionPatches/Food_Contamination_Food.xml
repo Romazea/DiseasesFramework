@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Patch>
-    <!-- Meal and processed food patch -->
-    <!-- Injects ingestion contagion logic into meals, pemmican, and kibble -->
     <Operation Class="PatchOperationSequence">
         <operations>
-
-            <!-- Checks for ingestable items definited as Meals, inhereting from Mealbase, or specific defNames -->
             <li Class="PatchOperationConditional">
                 <xpath>/Defs/ThingDef[ingestible/foodType="Meal" or @ParentName="MealBase" or defName="Pemmican" or defName="Kibble"]/comps</xpath>
 
@@ -13,6 +9,7 @@
                     <xpath>/Defs/ThingDef[ingestible/foodType="Meal" or @ParentName="MealBase" or defName="Pemmican" or defName="Kibble"]/comps</xpath>
                     <value>
                         <li Class="DiseasesFramework.InfectionVectors.DF_Ingestion.CompProperties_ContaminatedFood">
+                            <baseInfectionWeight>1.0</baseInfectionWeight>
                             <sendNotification>true</sendNotification>
                             <useLetterInsteadOfMessage>false</useLetterInsteadOfMessage>
                         </li>
@@ -24,6 +21,7 @@
                     <value>
                         <comps>
                             <li Class="DiseasesFramework.InfectionVectors.DF_Ingestion.CompProperties_ContaminatedFood">
+                                <baseInfectionWeight>1.0</baseInfectionWeight>
                                 <sendNotification>true</sendNotification>
                                 <useLetterInsteadOfMessage>false</useLetterInsteadOfMessage>
                             </li>
@@ -31,7 +29,6 @@
                     </value>
                 </nomatch>
             </li>
-
         </operations>
     </Operation>
 </Patch>
